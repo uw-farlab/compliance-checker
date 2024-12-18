@@ -7,9 +7,9 @@ import re
 import warnings
 from collections import defaultdict
 from functools import lru_cache, partial
+from importlib.resources import files
 
 from cf_units import Unit
-from importlib_resources import files
 
 _UNITLESS_DB = None
 _SEA_NAMES = None
@@ -2028,7 +2028,7 @@ def guess_feature_type(nc, variable):
         return "reduced-grid"
 
 
-def units_convertible(units1, units2, reftimeistime=True):
+def units_convertible(units1, units2):
     """
     Return True if a Unit representing the string units1 can be converted
     to a Unit representing the string units2, else False.

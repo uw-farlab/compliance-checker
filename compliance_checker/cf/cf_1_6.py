@@ -1865,23 +1865,15 @@ class CF1_6Check(CFNCCheck):
                     ret_val.append(result)
             # IMPLEMENTATION CONFORMANCE 4.4 RECOMMENDED 2/2
             # catch non-recommended months or years time interval
-            unit = Unit(variable.units)
-            chk_interval = False
-            cfver = cf_units.__version__.split('.')
-            if int(cfver[0]) < 3:
-                chk_interval = True
-            if int(cfver[0]) == 3 and int(cfver[1]) < 3:
-                chk_interval = True
-            if chk_interval:
-                if unit.is_long_time_interval():
-                    message = f"Using relative time interval of months or years is not recommended for coordinate variable {variable.name}"
-                    result = Result(
-                        BaseCheck.MEDIUM,
-                        False,
-                        self.section_titles["4.4"],
-                        [message],
-                    )
-                    ret_val.append(result)
+            if any(unit in variable.units for unit in ("months", "years")):
+                message = f"Using relative time interval of months or years is not recommended for coordinate variable {variable.name}"
+                result = Result(
+                    BaseCheck.MEDIUM,
+                    False,
+                    self.section_titles["4.4"],
+                    [message],
+                )
+                ret_val.append(result)
         return ret_val
 
     def check_calendar(self, ds):
